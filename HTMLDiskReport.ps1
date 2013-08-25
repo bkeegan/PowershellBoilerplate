@@ -1,4 +1,4 @@
-#REQUIRES function ConvertDriveUnits (also in this repository)
+#REQUIRES function ConvertBytes (also in this repository)
 
 Function HTMLDiskReport($strComputer,$strFile="c:\temp\diskreport.html",$bolFirst=$true,$strTitle = "Disk Usage Report - " + (Get-Date -format g))
 {
