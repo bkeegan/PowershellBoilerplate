@@ -122,9 +122,9 @@ a:visited{
 	Foreach ($drive in $objResults) 
 	{
 		#gets total size and used space converted to most appropriate measurement (smallest number not smaller than 1)
-		$TotalSize = ConvertDriveUnits($drive.size)
+		$TotalSize = ConvertBytes($drive.size)
 		$UsedSpace = $drive.size - $drive.freespace
-		$UsedSpace = ConvertDriveUnits($UsedSpace)
+		$UsedSpace = ConvertBytes($UsedSpace)
 		#gets used space as a percentage
 		$intPercentage = 100 - ($drive.freespace / $drive.size) * 100
 		#determines what color to makes the percentage bar. I thought about making it shift between green and red based on the precise percentage but decided not to do that for now. 
