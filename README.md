@@ -1,7 +1,6 @@
 PowershellBoilerplate
 =====================
 
-A collection of reliable Boilerplate Powershell scripts written by Brenton Keegan
+A collection Boilerplate (or somewhat boilerplate) Powershell scripts written by Brenton Keegan. Use at your own risk.
 
 
-Yes - there is nothing up here now. Still WIP.
