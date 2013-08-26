@@ -14,3 +14,12 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+
+Contact
+Brenton Keegan
+6801 21st Ave Apt A4
+Brooklyn, NY 11204
+brenton.keegan@gmail.com
+
+Full license can be viewed here:
+http://www.gnu.org/licenses/gpl-2.0.html#SEC1
