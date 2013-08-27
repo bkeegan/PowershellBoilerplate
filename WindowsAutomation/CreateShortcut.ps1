@@ -1,4 +1,3 @@
-
 function CreateShortcut($strExe,$StrWorkingDir,$strArgs,$strIcon,$strDescription,$strDestination)
 {
 	#function written by Brenton Keegan - creates an shortcut according to the entered parameters
