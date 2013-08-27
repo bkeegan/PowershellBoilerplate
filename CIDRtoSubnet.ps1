@@ -1,18 +1,17 @@
-
 #REQUIRES function ConvertToBinary (also available in this repository)
 
-Function GetNumberOfHosts($intCIDR,$bolSubnetMask=$false)
+Function CIDRtoSubnet($intCIDR,$bolGetHostCount=$false)
 {
 	<#
 	Author: Brenton Keegan
-	Description: This function returns the number of hosts for the CIDR notation inputed. (actually calculates it and not just a hardcoded return) Function will return number minus host/network address
-	This function can optionally output the subnet mask instead of the # of hosts
+	Description: This function takes cidr notation and outputs the corresponding subnet mask. This script can handle input with our without the preceeding forward-slash. 
+	This function can optionally output the number of hosts instead of the subnet mask
 	#>
 	#strips out leading / 
 	$intCIDR = $intCIDR -Replace "\/", ""
 
 	$hostbits = (32 - $intCIDR) #get the number of bits for the host
-	If($bolSubnetMask = $false)
+	If($bolSubnetMask = $true)
 	{
 		Return [math]::pow(2,$hostbits) - 2 # Calculate total number of addrs minus network and broadcast
 	}
