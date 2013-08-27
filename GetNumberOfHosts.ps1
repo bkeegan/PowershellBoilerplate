@@ -11,5 +11,3 @@ Function GetNumberOfHosts($intCIDR)
 	Return [math]::pow(2,$hostbits) - 2 # calcuate total number of addrs minus network and broadcast
 	
 }
-
-GetNumberOfHosts "/24"
