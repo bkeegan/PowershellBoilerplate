@@ -1,4 +1,4 @@
-function MergeHashTables($ht1,$ht2)
+function MergeHashValues($ht1,$ht2)
 {
 	<#
 	Author: Brenton Keegan - 8/27/2013
