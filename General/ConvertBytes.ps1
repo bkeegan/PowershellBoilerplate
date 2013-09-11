@@ -3,11 +3,11 @@ function ConvertBytes($intInBytes)
 	$i = 0
 
 	<#
-		Author: Brenton Keegan - Written on 8/24/2013
-		Description: This function converts a number in bytes to the most appropiate derivative measurement. It does so by continually dividing by 1024 until the number is less than 1.
-		Once it reaches this point it divides the input number by 1024 to the power of the number of times it looped -1. 
-		
-		$intInBytes: The input in bytes 
+	Author: Brenton Keegan - Written on 8/24/2013
+	Description: This function converts a number in bytes to the most appropiate derivative measurement. It does so by continually dividing by 1024 until the number is less than 1.
+	Once it reaches this point it divides the input number by 1024 to the power of the number of times it looped -1. 
+	
+	$intInBytes: The input in bytes 
 	#>
 
 	#intConversion is the variable that is used to determine how much to divide by
