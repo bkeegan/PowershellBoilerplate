@@ -1,5 +1,7 @@
 function ConvertBytes($intInBytes)
 {
+	$i = 0
+
 	<#
 		Author: Brenton Keegan - Written on 8/24/2013
 		Description: This function converts a number in bytes to the most appropiate derivative measurement. It does so by continually dividing by 1024 until the number is less than 1.
@@ -7,17 +9,17 @@ function ConvertBytes($intInBytes)
 		
 		$intInBytes: The input in bytes 
 	#>
-	
+
 	#intConversion is the variable that is used to determine how much to divide by
 	$intConversion = $intInBytes
-	
+
 	#continually loop dividing intConversion by 1024 as long as it's is greater than 1
 	Do 
 	{
 		$intConversion = $intConversion/1024
 		$i++
-	} While($intConversion -gt 1)
-	
+	} While($intConversion -ge 1)
+
 	#increment back one step so $i is equal to the number of times the input number needs to be divided by 1024 to yield the smallest number that is not less than 1
 	$i--
 	#determine the resultant unit of measurement
@@ -36,8 +38,7 @@ function ConvertBytes($intInBytes)
 	#actual number to output - divides the input number by 1024 to the power of $i
 	$intInBytes = ($intInBytes / [math]::pow(1024,$i))
 	$intInBytes = "{0:N2}" -f $intInBytes
-	
 	#returns a string with appended by the unit of measurement
 	Return [string]$intInBytes + $strUnits
-	
+
 }
