@@ -113,7 +113,7 @@ function WriteToEventLog([string]$strMsg,[string]$strType="Information",[string]
 	}
 
 	#if "Critical" event was attempted - convert to Error as it's more appropriate
-	if($strType = "Critical") 
+	if($strType -eq "Critical") 
 	{
 		$strType = "Error"
 	}
