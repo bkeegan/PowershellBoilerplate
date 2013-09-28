@@ -20,8 +20,8 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #>
 
-#REQUIRES: WriteToEventLog (included in this repository)
-#REQUIRES: WritetoLogFile (included in this repository)
+#REQUIRE: WriteToEventLog (included in this repository)
+#REQUIRE: WritetoLogFile (included in this repository)
 #If you do not wish to use these functions you can substitutes the calls to the WriteToEventLog function with the native Powershell variant.
 
 
