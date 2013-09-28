@@ -1,4 +1,4 @@
-#REQUIRES function ConvertToBinary (also available in this repository)
+#REQUIRE function ConvertToBinary (also available in this repository)
 
 Function CIDRtoSubnet($intCIDR,$bolGetHostCount=$false)
 {
