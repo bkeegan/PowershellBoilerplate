@@ -33,8 +33,10 @@ function PSCompareFileHash($strFile1,$strFile2)
 	#computer file 2 hash
 	$File2Bytes = [io.File]::ReadAllBytes($strFile2)				
 	$File2Hash = $HashAlgorithm.ComputeHash($File2Bytes)	
+	
+	
 					
-	if($File1Hash -eq $File2Hash)
+	if([string]$File1Hash -eq [string]$File2Hash)
 	{
 		Return $true
 	}
