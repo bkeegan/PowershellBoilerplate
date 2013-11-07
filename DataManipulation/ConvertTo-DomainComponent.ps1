@@ -1,5 +1,5 @@
 <#
-DNtoLDAP.ps1 - converts a domain name (e.g. "city.domain.local") to LDAP notation (e.g dc=city,dc=domain,dc=org) with regular expressions.
+ConvertTo-DomainComponent.ps1 - converts a domain name (e.g. "city.domain.local") to LDAP notation (e.g dc=city,dc=domain,dc=org) with regular expressions.
 
 Copyright (C) 2013  Brenton Keegan
 
@@ -18,14 +18,20 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #>
 
-Function DNtoLDAP($strDomainName)
+Function ConvertTo-DomainComponent
 {
+	[cmdletbinding()]
+
+	Param
+	(
+		[parameter(Mandatory=$true,ValueFromPipeline=$true)]
+		[alias("dn")]
+		[string]$domainname
+	)
+
 	#Turns a domain name (e.g. "city.domain.local") to LDAP notation (e.g dc=city,dc=domain,dc=org)
-
-	$strDomainName = $strDomainName -replace "^","dc=" #first part of DN
-	$strDomainName = $strDomainName -replace "\.",",dc=" #all others
-	Return $strDomainName
-
-
-
+	
+	$domainname = $domainname -replace "^","dc=" #first part of DN
+	$domainname = $domainname -replace "\.",",dc=" #all others
+	Return $domainname
 }
