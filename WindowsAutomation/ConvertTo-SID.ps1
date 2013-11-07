@@ -20,19 +20,21 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 function ConvertTo-SID
 {
-		#written by Brenton keegan on 11/6/2013 - Returns SID of local user account
-		#1. $username - name of local user account to get the SID of.
+	#written by Brenton keegan on 11/6/2013 - Returns SID of local user account
+	#1. $username - name of local user account to get the SID of.
 
-		[cmdletbinding()]
+	[cmdletbinding()]
 
-		Param
-		(
-			[parameter(Mandatory=$true,ValueFromPipeline=$true)]
-			[alias("user")]
-			[alias("u")]
-			[string]$username
-			
-		)
+	Param
+	(
+		[parameter(Mandatory=$true,ValueFromPipeline=$true)]
+		[alias("user")]
+		[alias("u")]
+		[string]$username
+		
+	)
 
-
-		$user = New-O
+	$user = New-Object System.Security.Principal.NTAccount($username)
+	$sid = $user.Translate([System.Security.Principal.SecurityIdentifier])
+	Return $sid.Value
+}
