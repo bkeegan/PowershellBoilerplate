@@ -50,12 +50,12 @@ function New-LocalUser
 			
 			[parameter(Mandatory=$false)]
 			[alias("d")]
-			$description="Local User Account",
+			[string]$description="Local User Account",
 			
 			[parameter(Mandatory=$false)]
 			[alias("machine")]
 			[alias("c")]
-			$computer="$env:COMPUTERNAME",
+			[string]$computer="$env:COMPUTERNAME",
 			
 			[parameter(Mandatory=$false)]
 			[alias("f")]
