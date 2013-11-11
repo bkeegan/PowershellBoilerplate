@@ -29,20 +29,30 @@ Function Remove-SpecifiedItems
 		[parameter(Mandatory=$true)]
 		[alias("target")]
 		[alias("t")]
-		[string]$targetdirectory,
+		[string]$targetDirectory,
 		
 		[parameter(Mandatory=$true,ValueFromPipeline=$true)]
 		[alias("items")]
 		[alias("i")]
 		[string]$itemsToDelete
+		
 	)
 	
 	$itemsToDeleteArray = $itemsToDelete -split (";")
-	Get-ChildItem $targetdirectory | Select -Property name | foreach {$_.name
-			$item = [string]$_.name
-			if($itemsToDeleteArray -contains $item)
+	$targetContents = Get-ChildItem $targetDirectory | Select -Property name | foreach {$_.name}
+	Foreach($item in $targetContents)
+	{
+		For($i=0;$i -le $itemsToDeleteArray.GetUpperBound(0);$i++)
+		{
+			$regexToMatch = $itemsToDeleteArray[$i]
+			$regexToMatch -match "\..+$" | out-null
+			$regexToMatch = $regexToMatch -replace "\..+$","\$($matches[0])"
+			$regexToMatch = $regexToMatch -replace "\*",".+"
+			$regexToMatch = "^" + $regexToMatch + '$'
+			if($item -match [regex]$regexToMatch)
 			{
-					Remove-Item "$targetdirectory\$item"
+				Remove-Item "$targetDirectory\$($matches[0])"
 			}
-	} | Out-Null
+		}
+	}
 }
