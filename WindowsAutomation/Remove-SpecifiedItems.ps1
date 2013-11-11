@@ -26,15 +26,15 @@ Function Remove-SpecifiedItems
 	[cmdletbinding()]
 	Param
 	(
-		[parameter(Mandatory=$true,ValueFromPipeline=$true)]
-		[alias("items")]
-		[alias("i")]
-		[string]$itemsToDelete,
-		
 		[parameter(Mandatory=$true)]
 		[alias("target")]
 		[alias("t")]
-		[string]$targetdirectory
+		[string]$targetdirectory,
+		
+		[parameter(Mandatory=$true,ValueFromPipeline=$true)]
+		[alias("items")]
+		[alias("i")]
+		[string]$itemsToDelete
 	)
 	
 	$itemsToDeleteArray = $itemsToDelete -split (";")
