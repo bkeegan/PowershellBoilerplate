@@ -18,6 +18,8 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #>
 
+#PREREQ - Compare-FileHash - available in this repository
+
 function Sync-Files
 {
 	<#Description: This cmdlet syncs all files on a specified source to a specified destination ONLY if the files do not exist at the destination or the files on the source are different.
@@ -85,9 +87,7 @@ function Sync-Files
 		New-Item -ItemType directory -Path $destinationDirectory
 	}
 	
-	
-	$objShell = New-Object -COM WScript.Shell
-	$Files = Get-ChildItem -Path $sourceDirectory
+	$files = Get-ChildItem -Path $sourceDirectory
 	foreach($file in $files)
 	{
 
@@ -95,13 +95,14 @@ function Sync-Files
 		{
 			if(!(Test-Path "$destinationDirectory\$($file.name)"))
 			{
+
 				Copy-item $file.fullname $destinationDirectory
 				Write-EventLog -Logname $logname -Source $logsource -EventID 1000 -EntryType "Information" -Message "File does not exist. Copied File $($file.fullname) to $destinationDirectory"
 			}
 			else
 			{
 				#If file already exists on host use hashing to determine if a different version is in repository
-				if(((Compare-FileHash -1 $file.fullname -2 "$destinationDirectory\$($file.name)") -eq $false))
+				if(((Compare-FileHash -f1 $file.fullname -f2 "$destinationDirectory\$($file.name)") -eq $false))
 				{
 					Copy-item $file.fullname $destinationDirectory
 					Write-EventLog -Logname $logname -Source $logsource -EventID 1000 -EntryType "Information" -Message "File $($file.fullname) in repository is different than on localhost. Copied file $($file.fullname) to $destinationDirectory"
@@ -114,3 +115,4 @@ function Sync-Files
 		}	
 	}
 }
+
