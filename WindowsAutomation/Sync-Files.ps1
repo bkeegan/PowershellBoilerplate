@@ -42,7 +42,15 @@ function Sync-Files
 		
 		[parameter(Mandatory=$false)]
 		[alias("r")]
-		[string]$registryLocation
+		[string]$registryLocation,
+		
+		[parameter(Mandatory=$false)]
+		[alias("l")]
+		[string]$logname="Application",
+		
+		[parameter(Mandatory=$false)]
+		[alias("ls")]
+		[string]$logsource="WSH"
 		
 	)
 	
@@ -68,8 +76,8 @@ function Sync-Files
 		$destinationDirectory = $registryDestination + "\$destinationDirectory"
 	}
 	
-	#WriteToEventLog "Beginning CopyFiles Script" "Information" $strLogname
-	#$ErrorActionPreference = "SilentlyContinue" #req'd for try/catch statement
+	Write-EventLog -Logname $logname -Source $logsource -EventID 1000 -EntryType "Information" -Message "Beginning Script"
+	$ErrorActionPreference = "SilentlyContinue" #req'd for try/catch statement
 
 	#create destination directory if it doesn't exist
 	If (!(test-path $destinationDirectory))
@@ -88,7 +96,7 @@ function Sync-Files
 			if(!(Test-Path "$destinationDirectory\$($file.name)"))
 			{
 				Copy-item $file.fullname $destinationDirectory
-				#WriteToEventLog "File does not exist. Copied File $($file.fullname) to $destinationDirectory" "Information" $strLogname
+				Write-EventLog -Logname $logname -Source $logsource -EventID 1000 -EntryType "Information" -Message "File does not exist. Copied File $($file.fullname) to $destinationDirectory"
 			}
 			else
 			{
@@ -96,13 +104,13 @@ function Sync-Files
 				if(((Compare-FileHash -1 $file.fullname -2 "$destinationDirectory\$($file.name)") -eq $false))
 				{
 					Copy-item $file.fullname $destinationDirectory
-					#WriteToEventLog "File $($file.fullname) in repository is different than on localhost. Copied file $($file.fullname) to $destinationDirectory" "Information" "CopyFiles Script"
+					Write-EventLog -Logname $logname -Source $logsource -EventID 1000 -EntryType "Information" -Message "File $($file.fullname) in repository is different than on localhost. Copied file $($file.fullname) to $destinationDirectory"
 				}
 			}
 		}
 		Catch
 		{
-			#WriteToEventLog "Error copying file. $error" "ERROR" $strLogname
+			Write-EventLog -Logname $logname -Source $logsource -EventID 1000 -EntryType "Error" -Message "Error copying file. $error"
 		}	
 	}
 }
