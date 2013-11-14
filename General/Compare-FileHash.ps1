@@ -28,11 +28,11 @@ function Compare-FileHash
 	(
 		
 		[parameter(Mandatory=$true)]
-		[alias("1")]
+		[alias("f1")]
 		[string]$file1,
 		
 		[parameter(Mandatory=$true)]
-		[alias("2")]
+		[alias("f2")]
 		[string]$file2,
 		
 		[parameter(Mandatory=$false)]
