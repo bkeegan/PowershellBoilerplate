@@ -54,9 +54,10 @@ function Install-Patches
 		[alias("ls")]
 		[string]$logSource="WSH"
 	)
-	
 
-	if(!(Test-path $installDirectory)
+	Write-EventLog -Logname $logName -Source $logSource -EventID 1000 -EntryType "Information" -Message "Beginning Patch Process"	
+
+	if(!(Test-path $installDirectory))
 	{
 		Write-EventLog -Logname $logName -Source $logSource -EventID 1000 -EntryType "Information" -Message "Application not installed - skipping patch process"
 	}
