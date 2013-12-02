@@ -18,6 +18,8 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #>
 
+#PREREQ: Needs Get-FileHash and Get-ScriptInfo - both available in this repository.
+
 function Install-Patches
 {
 	<#Description: This cmdlet installs patches in order based on the created date of the patch file. 
