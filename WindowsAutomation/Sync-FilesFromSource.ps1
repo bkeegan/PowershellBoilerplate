@@ -1,5 +1,5 @@
 <#
-Sync-Files.ps1 - Downloads files from a specified source only if they have changed or do not exist at destination.
+Sync-FilesFromSource.ps1 - Downloads files from a specified source only if they have changed or do not exist at destination.
 
 Copyright (C) 2013  Brenton Keegan
 
@@ -20,7 +20,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 #PREREQ - Compare-FileHash - available in this repository
 
-function Sync-Files
+function Sync-FilesFromSource
 {
 	<#Description: This cmdlet syncs all files on a specified source to a specified destination ONLY if the files do not exist at the destination or the files on the source are different.
 		1. $sourceDirectory - source files. Source files will remain unchanged.
