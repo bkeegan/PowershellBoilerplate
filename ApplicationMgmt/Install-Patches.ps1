@@ -53,40 +53,48 @@ function Install-Patches
 		[string]$logSource="WSH"
 	)
 	
-	[array]$patches = Get-ChildItem $patchDirectory | Sort-Object -Property CreationTime
-	$scriptname = Get-ScriptInfo -i "filename"
-	if(!(Test-Path "$installDirectory\$scriptname.log"))
+
+	if(!(Test-path $installDirectory)
 	{
-		#No patchlog exists - assumes fresh install and installs oldest patch in repository.
-		Write-EventLog -Logname $logName -Source $logSource -EventID 1000 -EntryType "Information" -Message "No Patch Log Found - installing oldest patch in repository"
-		$process = [System.Diagnostics.Process]::Start("$patchDirectory\$($patches[0])", $strSwitches)
-		$filehash = Get-FileHash -f "$patchDirectory\$($patches[0])"
-		Add-Content "$installDirectory\$scriptname.log" "$filehash"
+		Write-EventLog -Logname $logName -Source $logSource -EventID 1000 -EntryType "Information" -Message "Application not installed - skipping patch process"
 	}
 	else
 	{
-		[array]$installedPatches = Get-Content "$installDirectory\$scriptname.log"
-		If($installedPatches.GetUpperBound(0) -ne $patches.GetUpperBound(0))
+		[array]$patches = Get-ChildItem $patchDirectory | Sort-Object -Property CreationTime
+		$scriptname = Get-ScriptInfo -i "filename"
+		if(!(Test-Path "$installDirectory\$scriptname.log"))
 		{
-			$latestInstalledPatch = $installedPatches[$installedPatches.GetUpperBound(0)]
-			For($i=0;$i -le $installedPatches.GetUpperBound(0);$i++) 
-			{
-				
-				$filehash = Get-FileHash -f "$patchDirectory\$($patches[$i])"
-				If($filehash -eq $latestInstalledPatch)
-				{
-					#Found latest installed patch - install next available patch
-					$y = $i + 1
-					$filehash = Get-FileHash -f "$patchDirectory\$($patches[$y])"
-					Write-EventLog -Logname $logName -Source $logSource -EventID 1000 -EntryType "Information" -Message "Installing $patchDirectory\$($patches[$y])"
-					$process = [System.Diagnostics.Process]::Start("$patchDirectory\$($patches[$y])", $strSwitches)
-					Add-Content "$installDirectory\$scriptname.log" "$filehash"
-				}
-			}
+			#No patchlog exists - assumes fresh install and installs oldest patch in repository.
+			Write-EventLog -Logname $logName -Source $logSource -EventID 1000 -EntryType "Information" -Message "No Patch Log Found - installing oldest patch in repository"
+			$process = [System.Diagnostics.Process]::Start("$patchDirectory\$($patches[0])", $strSwitches)
+			$filehash = Get-FileHash -f "$patchDirectory\$($patches[0])"
+			Add-Content "$installDirectory\$scriptname.log" "$filehash"
 		}
 		else
 		{
-			Write-EventLog -Logname $logName -Source $logSource -EventID 1000 -EntryType "Information" -Message "Application Up to Date"
+			[array]$installedPatches = Get-Content "$installDirectory\$scriptname.log"
+			If($installedPatches.GetUpperBound(0) -ne $patches.GetUpperBound(0))
+			{
+				$latestInstalledPatch = $installedPatches[$installedPatches.GetUpperBound(0)]
+				For($i=0;$i -le $installedPatches.GetUpperBound(0);$i++) 
+				{
+					
+					$filehash = Get-FileHash -f "$patchDirectory\$($patches[$i])"
+					If($filehash -eq $latestInstalledPatch)
+					{
+						#Found latest installed patch - install next available patch
+						$y = $i + 1
+						$filehash = Get-FileHash -f "$patchDirectory\$($patches[$y])"
+						Write-EventLog -Logname $logName -Source $logSource -EventID 1000 -EntryType "Information" -Message "Installing $patchDirectory\$($patches[$y])"
+						$process = [System.Diagnostics.Process]::Start("$patchDirectory\$($patches[$y])", $strSwitches)
+						Add-Content "$installDirectory\$scriptname.log" "$filehash"
+					}
+				}
+			}
+			else
+			{
+				Write-EventLog -Logname $logName -Source $logSource -EventID 1000 -EntryType "Information" -Message "Application Up to Date"
+			}
 		}
 	}
 }
