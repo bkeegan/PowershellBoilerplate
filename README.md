@@ -5,8 +5,9 @@ A collection boilerplate Powershell scripts written by Brenton Keegan. Provided 
 
 As compared to PSCX: PSCX or Powershell Community Extensions is another set of boilerplate powershell cmdlets available on codeplex (http://pscx.codeplex.com/). Powershell Boilerplate, while overlaps in some ways, differs in the following
 
-  -Licensing. PSCX is under the "Microsoft Public License" (MS-PL) while this repository is under GPLv2. 
-  -Looser definition of "boilerplate". This repository contains some more particular implentations (for example, methods for deploying applications and applying patches). The code is, however, designed to work in any Windows environment.
+  -Licensing: PSCX is under the "Microsoft Public License" (MS-PL) while this repository is under GPLv2. 
+  -Looser definition of "boilerplate": This repository contains some more particular implentations (for example, methods for deploying applications and applying patches). The code is, however, designed to work in any Windows environment.
+  -Code with module prerequistes: PSCX is designed to be usable on any machine with Powershell installed. This repository contains cmdlets that requires other modules to be installed (for example, active directory)
 
 
 
