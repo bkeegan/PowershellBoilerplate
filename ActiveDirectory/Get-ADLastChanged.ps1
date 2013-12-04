@@ -24,10 +24,6 @@ function Get-ADLastChanged
 {
      <#Description: This cmdlet gets the last time a specified AD object was changed.
         1. $ADObjectDN - Distinguished name of AD object.
-        2. $installDirectory - directory where application is installed
-        3. $switches - switches for silent install of patches
-        4. $logName - name of the log to write events to
-        5. $logSource - source of log events
         #>
         
         [cmdletbinding()]
