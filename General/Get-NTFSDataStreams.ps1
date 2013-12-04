@@ -23,11 +23,21 @@ function Get-NTFSDataStreams
 	[cmdletbinding()]
 	Param
 	(
-		[parameter(Mandatory=$true)]
+		[parameter(Mandatory=$true,ValueFromPipeline=$true)]
 		[alias("p")]
-		$path
+		$path,
+		
+		[parameter(Mandatory=$false)]
+		[alias("r")]
+		[switch]$recurse
 	)
 	
-	Get-ChildItem -path $path | Get-Item -stream *
-
+	if($recurse -eq $false)
+	{
+		Get-ChildItem -path $path | Get-Item -stream *
+	}
+	else
+	{
+		Get-ChildItem -path $path -r | Get-Item -stream *	
+	}
 }
