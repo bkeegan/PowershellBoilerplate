@@ -1,7 +1,17 @@
-PowershellBoilerplate
-=====================
+PowershellBoilerplate (PSBP)
+============================
 
-A collection Boilerplate (or somewhat boilerplate) Powershell scripts written by Brenton Keegan. Provided "as-is"
+A collection boilerplate Powershell scripts written by Brenton Keegan. Provided "as-is"
+
+As compared to PSCX: PSCX or Powershell Community Extensions is another set of boilerplate powershell cmdlets available on codeplex (http://pscx.codeplex.com/). Powershell Boilerplate, while overlaps in some ways, differs in the following
+
+  -Licensing. PSCX is under the "Microsoft Public License" (MS-PL) while this repository is under GPLv2. 
+  -Looser definition of "boilerplate". This repository contains some more particular implentations (for example, methods for deploying applications and applying patches). The code is, however, designed to work in any Windows environment.
+
+
+
+
+
 License
 =====================
 
