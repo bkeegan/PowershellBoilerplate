@@ -27,7 +27,7 @@ function Get-ADComputerByOS
         2. $version - version of operating system - examples "7" "Vista" "X"
         3. $edition - Edition of operating system - examples "standard" "enterprise"
         4. $inverseQuery - Will inverse query and return any OS not like the previous parameters
-		    5. $exactQuery - will make query exact. By default search query is appended with a wildcard so "Windows Server 2008" will return 2008 and 2008 R2. -x makes query so previous query will only return Windows Server 2008
+	5. $exactQuery - will make query exact. By default search query is appended with a wildcard so "Windows Server 2008" will return 2008 and 2008 R2. -x makes query so previous query will only return Windows Server 2008
         #>
         
         [cmdletbinding()]
