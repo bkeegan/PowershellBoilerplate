@@ -37,21 +37,21 @@ function Get-ADComputerByOS
                 [alias("o")]
                 [string]$operatingSystem,
 				
-				[parameter(Mandatory=$false)]
+		[parameter(Mandatory=$false)]
                 [alias("v")]
                 [string]$version,
 				
-				[parameter(Mandatory=$false)]
+		[parameter(Mandatory=$false)]
                 [alias("e")]
                 [string]$edition,
 				
-				[parameter(Mandatory=$false)]
-				[alias("i")]
-				[switch]$inverseQuery, 
-			
-				[parameter(Mandatory=$false)]
-				[alias("x")]
-				[switch]$exactQuery 
+		[parameter(Mandatory=$false)]
+		[alias("i")]
+		[switch]$inverseQuery, 
+	
+		[parameter(Mandatory=$false)]
+		[alias("x")]
+		[switch]$exactQuery 
 				
         )
 		
