@@ -35,6 +35,7 @@ function ConvertFrom-Bytes
 
         <# Description: Converts a number measured in bytes and converts it to the most appropiate denomination. Ex. 1000 bytes will convert to 1 KB.
         1. bytes - bytes to convert to a different denomination.
+        2. Option to return true binary bytes (ex. 1024 bytes = 1 KiB)
         #>
 
 	if($binaryBytes -eq $true)
@@ -46,7 +47,7 @@ function ConvertFrom-Bytes
 		$divisor = 1000	
 	}
 	
-    #stores result of division and then divided again until result is less than 1
+    	#stores result of division and then divided again until result is less than 1
 	$divisorQuotent = $bytes
 
 	#continually loop dividing intConversion by 1024 as long as it's is greater than 1
