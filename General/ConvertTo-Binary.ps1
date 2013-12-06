@@ -44,8 +44,7 @@ function ConvertTo-Binary
 		
 		if(($hex -eq $null) -and ($decimal -eq $null))
 		{
-			Write-Error "You must specify a hexadecimal or decimal number to convert to binary"
-			Return
+			Throw "You must specify a hexadecimal or decimal number to convert to binary"
 		}
 
 		if($hex -ne $null)
