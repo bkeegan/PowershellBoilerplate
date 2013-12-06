@@ -39,7 +39,7 @@ function ConvertTo-Decimal
 		
 		if(($hex -eq $null) -and ($binary -eq $null))
 		{
-			Throw "You must specify a binary or decimal number to convert to decimal"
+			Throw "You must specify a binary or hexadecimal number to convert to decimal"
 		}
 
 		if($hex -ne $null)
