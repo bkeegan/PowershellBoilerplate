@@ -1,5 +1,5 @@
 <#
-ConvertTo-Binary.ps1 - Converts a decimal of hexadecimal number to binary
+ConvertTo-Binary.ps1 - Converts a decimal or hexadecimal number to binary
 
 Copyright (C) 2013  Brenton Keegan
 
