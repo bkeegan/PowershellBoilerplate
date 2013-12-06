@@ -22,15 +22,15 @@ function ConvertTo-Binary
 {
         <# Description: Converts a decimal of hexadecimal number to binary 
 		1. $decimal - specify a decimal number to convert to binary
-		2. $hex - specify a hexadecimal number to return to binary. If this is specified the -n value will be ignored.
-		3. $octet - if this switch is used this cmdlet will return a full octet (ie -n 4 will return 00000100 instead of 100)
+		2. $hex - specify a hexadecimal number to return to binary. If this is specified the -d value will be ignored.
+		3. $octet - if this switch is used this cmdlet will return a full octet (ie -d 4 will return 00000100 instead of 100)
 		#>
 		
 		[cmdletbinding()]
 		Param
 		(
 			[parameter(Mandatory=$false,ValueFromPipeline=$true)]
-			[alias("n")]
+			[alias("d")]
 			$decimal,
 			
 			[parameter(Mandatory=$false,ValueFromPipeline=$true)]
