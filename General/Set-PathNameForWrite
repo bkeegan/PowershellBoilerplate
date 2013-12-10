@@ -1,5 +1,5 @@
 <#
-Edit-IncrementPathName.ps1 - Increments path to avoid file/folder name conflicts
+Set-PathNameForWrite.ps1 - Increments path to avoid file/folder name conflicts
 
 Copyright (C) 2013  Brenton Keegan
 
@@ -18,7 +18,7 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #>
 
-function Edit-IncrementPathName
+function Set-PathNameForWrite
 {
 	
 	#This function is designed to increment a path name (either folder or file) if it finds that the entered path exists. This is used to dynamically create folders and files while avoiding naming conflicts.
