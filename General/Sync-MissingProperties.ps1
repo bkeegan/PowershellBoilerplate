@@ -1,5 +1,5 @@
 <#
-Edit-HomogenizeProperties.ps1 - Makes all objects in a specified array have the same properties inserting a specified fill value for missing properties that were added
+Sync-MissingProperties.ps1 - Makes all objects in a specified array have the same properties inserting a specified fill value for missing properties that were added
 
 Copyright (C) 2013  Brenton Keegan
 
@@ -19,7 +19,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #>
 
 
-function Edit-HomogenizeProperties
+function Sync-MissingProperties
 {
  	[cmdletbinding()]
 	Param
