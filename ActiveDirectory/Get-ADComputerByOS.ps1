@@ -33,34 +33,41 @@ function Get-ADComputerByOS
         [cmdletbinding()]
         Param
         (
-                [parameter(Mandatory=$true,ValueFromPipeline=$true)]
-                [alias("o")]
-                [string]$operatingSystem,
-				
+		[parameter(Mandatory=$true,ValueFromPipeline=$true)]
+		[alias("o")]
+		[string]$operatingSystem,
+		
 		[parameter(Mandatory=$false)]
-                [alias("v")]
-                [string]$version,
-				
+		[alias("v")]
+		[string]$version,
+		
 		[parameter(Mandatory=$false)]
-                [alias("e")]
-                [string]$edition,
-				
+		[alias("e")]
+		[string]$edition,
+		
 		[parameter(Mandatory=$false)]
 		[alias("i")]
 		[switch]$inverseQuery, 
 	
 		[parameter(Mandatory=$false)]
 		[alias("x")]
-		[switch]$exactQuery 
-				
+		[switch]$exactQuery 	
         )
-		
-	$searchFilter = "$operatingSystem" + " " + "$version" + " " + "$edition"
+	$searchFilter = "$operatingSystem"
+	if($verson -ne "")
+	{
+		$searchFilter = $searchFilter + " " + "$version"
+	}
 	
-	if($exactQuery -ne $false)
+	if($edition -ne "")
+	{
+		$searchFilter = $searchFilter + " " + "$edition"	
+	}
+	if($exactQuery -eq $false)
 	{
 		$searchFilter = $searchFilter + "*"
 	}
+	$searchFilter
 	
 	if($inverseQuery -eq $false)
 	{
