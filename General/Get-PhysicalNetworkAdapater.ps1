@@ -20,18 +20,21 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 function Get-PhysicalNetworkAdapater
 {
+    [cmdletbinding()]
+	Param
+	(
 		[parameter(Mandatory=$false,ValueFromPipeline=$true)]
 		[alias("c")]
 		[string]$computer
+	)
 		
-		if($computer -eq $null)
-		{
-			$computer = "localhost"
-		}
-		$computer
-		$return = Get-WMIObject -ComputerName $computer win32_networkadapter | Where {$_.PNPDeviceID -notmatch "[ROOT|SW]\\.+"}
-		Return $return
+	if($computer -eq $null)
+	{
+		$computer = "localhost"
+	}
+	$computer
+	$return = Get-WMIObject -ComputerName $computer win32_networkadapter | Where {$_.PNPDeviceID -notmatch "[ROOT|SW]\\.+"}
+	Return $return
 
 }
 
-Get-PhysicalNetworkAdapater
