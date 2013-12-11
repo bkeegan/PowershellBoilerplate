@@ -1,5 +1,5 @@
 <#
-Get-Get-PhysicalNetworkAdapater.ps1 - performs a WMI query filtering out any network adapaters not attached to a physical bus
+Get-Get-PhysicalNetworkAdapter.ps1 - performs a WMI query filtering out any network adapaters not attached to a physical bus
 
 Copyright (C) 2013  Brenton Keegan
 
