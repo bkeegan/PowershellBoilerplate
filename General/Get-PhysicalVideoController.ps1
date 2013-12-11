@@ -20,16 +20,19 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 function Get-PhysicalVideoController
 {
+	[cmdletbinding()]
+	Param
+	(
 		[parameter(Mandatory=$false,ValueFromPipeline=$true)]
 		[alias("c")]
 		[string]$computer
+	)
 		
-		if($computer -eq $null)
-		{
-			$computer = "localhost"
-		}
-		$computer
-		$return = Get-WMIObject -ComputerName $computer win32_videocontroller | Where {$_.PNPDeviceID -notmatch "[ROOT|SW]\\.+"}
-		Return $return
+	if([string]$computer -eq "")
+	{
+		$computer = "localhost"
+	}
 
+	$return = Get-WMIObject -ComputerName $computer win32_videocontroller | Where {$_.PNPDeviceID -notmatch "[ROOT|SW]\\.+"}
+	Return $return
 }
