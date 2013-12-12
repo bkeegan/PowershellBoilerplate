@@ -19,7 +19,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #>
 
 #PREREQ: requires ConvertFrom-Bytes - also available in this repository
-
+#PREREQ: requires Get-PhysicalVideoController  - also available in this repository
+#PREREQ: requires Get-PhysicalNetworkAdapter  - also available in this repository
+#PREREQ: requires win32_MonitorDetails WMI Provider: Available here: http://sourceforge.net/projects/wmimonitor/
 function Get-WMIComputer
 {
 	<#
@@ -114,6 +116,10 @@ function Get-WMIComputer
 		[switch]$monitor,
 		
 		[parameter(Mandatory=$false)]
+		[alias("emt")]
+		[switch]$extendedMonitorInfo,
+		
+		[parameter(Mandatory=$false)]
 		[alias("o")]
 		[switch]$optic,					
 		
@@ -125,18 +131,19 @@ function Get-WMIComputer
 		[alias("u")]
 		[switch]$usb,
 		
-		#TODO
 		[parameter(Mandatory=$false)]
 		[alias("mb")]
 		[switch]$motherboard,
-		#manufacturer, Model, Name, Product
 		
 		[parameter(Mandatory=$false)]
 		[alias("a")]
 		[switch]$all,
 		
 		[parameter(Mandatory=$false)]
-		[switch]$noUSB #option to exclude USB because it generates a lot of data that's not often useful
+		[switch]$noUSB, #option to exclude USB because it generates a lot of data that's not often useful
+		
+		[parameter(Mandatory=$false)]
+		[switch]$noExt #option to exclude anything classified as "extended info" - useful to use with -a but not include what might be consider superfluous info
 	)
 	
         
@@ -192,7 +199,7 @@ function Get-WMIComputer
 				foreach ($procChip in $wmiCPU)
 				{
 					$wmiComputer | Add-Member -Membertype NoteProperty -Name CPU$($i) -Value $procChip.name
-					if(($extendedCPUInfo -eq $true) -or ($all -eq $true))
+					if(($extendedCPUInfo -eq $true) -or ($all -eq $true) -and ($noExt -ne $true))
 					{
 						$wmiComputer | Add-Member -MemberType NoteProperty -Name CPU$($i)_Clock -value $procChip.MaxClockSpeed
 						$wmiComputer | Add-Member -MemberType NoteProperty -Name CPU$($i)_AddressWidth -value $procChip.AddressWidth
@@ -209,7 +216,7 @@ function Get-WMIComputer
 				$wmiRAM = Get-WMIObject win32_physicalmemory -ComputerName $computer	
 				$FormattedRAMCapacity = (ConvertFrom-Bytes -b $wmiSystem.TotalPhysicalMemory -bi)
 				$wmiComputer | Add-Member -Membertype NoteProperty -Name Memory -Value $FormattedRAMCapacity
-				if(($extendedRamInfo -eq $true) -or ($all -eq $true))
+				if(($extendedRamInfo -eq $true) -or ($all -eq $true) -and ($noExt -ne $true))
 				{
 					$wmiRAMArrary = Get-WMIObject win32_physicalmemoryarray -ComputerName $computer		
 					$wmiComputer | Add-Member -Membertype NoteProperty -Name DIMMSlots -Value $wmiRAMArrary.MemoryDevices
@@ -233,7 +240,7 @@ function Get-WMIComputer
 					$formattedHDSize = (ConvertFrom-Bytes -b $harddrive.size -bi)
 					$wmiComputer | Add-Member -Membertype NoteProperty -Name HD$($i)_ID -Value $harddrive.DeviceID
 					$wmiComputer | Add-Member -Membertype NoteProperty -Name HD$($i)_Size -Value $formattedHDSize
-					if(($extendedHDInfo -eq $true) -or ($all -eq $true))
+					if(($extendedHDInfo -eq $true) -or ($all -eq $true) -and ($noExt -ne $true))
 					{
 						$formattedHDFreespace = (ConvertFrom-Bytes -b $harddrive.freespace -bi)
 						$wmiComputer | Add-Member -Membertype NoteProperty -Name HD$($i)_Label -Value $harddrive.VolumeName
@@ -307,7 +314,6 @@ function Get-WMIComputer
 				{
 					$wmiVideo = Get-PhysicalVideoController -c $computer
 				}
-				
 				$i = 0 
 
 				foreach ($vidcard in $wmiVideo)
@@ -324,13 +330,41 @@ function Get-WMIComputer
 			if(($monitor -eq $true) -or ($all -eq $true))
 			{
 				$i = 0
-				$wmiMonitor = Get-WMIObject win32_MonitorDetails -ComputerName $computer
-				foreach($desktopmonitor in $wmiMonitor)
+				$wmiMonitorDetails = Get-WMIObject win32_MonitorDetails -ComputerName $computer
+				$wmiMonitor = Get-WMIObject -namespace "root\wmi" WmiMonitorBasicDisplayParams -ComputerName $computer
+
+				foreach($monitordetail in $wmiMonitorDetails)
 				{
-					$wmiComputer | Add-Member -MemberType NoteProperty -Name Monitor$($i)_Model -Value $desktopmonitor.model
-					$wmiComputer | Add-Member -MemberType NoteProperty -Name Monitor$($i)_SerialNumber -Value $desktopmonitor.serialnumber
+					
+					$wmiComputer | Add-Member -MemberType NoteProperty -Name Monitor$($i)_Model -Value $monitordetail.model
+					if(($extendedMonitorInfo -eq $true) -or ($all -eq $true)-and ($noExt -ne $true))
+					{
+						$wmiComputer | Add-Member -MemberType NoteProperty -Name Monitor$($i)_SerialNumber -Value $monitordetail.serialnumber
+						foreach($desktopmonitor in $wmiMonitor)
+						{
+							
+							$aspectRatio = ($desktopmonitor.MaxHorizontalImageSize / $desktopmonitor.MaxVerticalImageSize)
+							$pnpID = $desktopmonitor.InstanceName -replace "^.+\\", ""
+							if($pnpID -eq [string]$monitordetail.pnpID + "_0")
+							{
+								switch($desktopmonitor.VideoInputType)
+								{
+									0{$connectionType = "Analog"}
+									1{$connectionType = "Digital"}
+								}
+								$wmiComputer | Add-Member -MemberType NoteProperty -Name Monitor$($i)_ConnectionType -Value $connectionType
+								$wmiComputer | Add-Member -MemberType NoteProperty -Name Monitor$($i)_AspectRatio -Value $aspectRatio
+							}
+						}
+					}
 					$i++
 				}
+				
+				if(($extendedMonitorInfo -eq $true) -or ($all -eq $true) -and ($noExt -ne $true))
+				{
+					$i = 0
+
+				}				
 			}
 			#Optical devices
 			if(($optical -eq $true) -or ($all -eq $true))
@@ -353,7 +387,6 @@ function Get-WMIComputer
 				{
 					$wmiComputer | Add-Member -MemberType NoteProperty -Name Sound$($i)_Name -Value $sounddevice.ProductName
 					$i++
-				
 				}
 			}
 			#usb devices
