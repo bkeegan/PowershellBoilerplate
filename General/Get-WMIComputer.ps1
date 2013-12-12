@@ -82,17 +82,31 @@ function Get-WMIComputer
 		[parameter(Mandatory=$false)]
 		[alias("er")] #returns ram about each chip.
 		[switch]$extendedRamInfo,
+
+		[parameter(Mandatory=$false)]
+		[alias("hd")]
+		[switch]$hardDrives,
 		
 		[parameter(Mandatory=$false)]
-		[switch]$hd,
+		[alias("ehd")]
+		[switch]$ExtendedHDInfo,
 		
 		[parameter(Mandatory=$false)]
-		[alias("ehd")] 
-		[switch]$extendedHDInfo,
+		[alias("dp")]
+		[switch]$drivePartitions,
+		
+		[parameter(Mandatory=$false)]
+		[alias("edp")] 
+		[switch]$extendedPartitionInfo,
 		
 		[parameter(Mandatory=$false)]
 		[alias("rd")] 
 		[switch]$removableDisk,
+		
+		[parameter(Mandatory=$false)]
+		[alias("erd")] 
+		[switch]$extendedRDInfo,
+		
 		
 		[parameter(Mandatory=$false)]
 		[alias("n")]
@@ -144,6 +158,7 @@ function Get-WMIComputer
 		
 		[parameter(Mandatory=$false)]
 		[switch]$noExt #option to exclude anything classified as "extended info" - useful to use with -a but not include what might be consider superfluous info
+
 	)
 	
         
@@ -229,24 +244,44 @@ function Get-WMIComputer
 					}
 				}
 			}
-					
-			#HDs
-			if(($hd -eq $true) -or ($all -eq $true))
-			{				
-				$i = 0 
-				$wmiHD = Get-WMIObject win32_logicaldisk -Filter "DriveType=3" -ComputerName $computer
+				
+			#hard drives
+			if(($hardDrives -eq $true) -or ($all -eq $true))
+			{	
+				$wmiHD = Get-WMIObject win32_diskdrive -ComputerName $computer
+				$i = 0
 				foreach($harddrive in $wmiHD)
 				{
-					$formattedHDSize = (ConvertFrom-Bytes -b $harddrive.size -bi)
-					$wmiComputer | Add-Member -Membertype NoteProperty -Name HD$($i)_ID -Value $harddrive.DeviceID
-					$wmiComputer | Add-Member -Membertype NoteProperty -Name HD$($i)_Size -Value $formattedHDSize
+					$wmiComputer | Add-Member -Membertype NoteProperty -Name HardDrive$($i)_Model -Value $harddrive.Model	
 					if(($extendedHDInfo -eq $true) -or ($all -eq $true) -and ($noExt -ne $true))
 					{
-						$formattedHDFreespace = (ConvertFrom-Bytes -b $harddrive.freespace -bi)
-						$wmiComputer | Add-Member -Membertype NoteProperty -Name HD$($i)_Label -Value $harddrive.VolumeName
-						$wmiComputer | Add-Member -Membertype NoteProperty -Name HD$($i)_Freespace -Value $formattedHDFreespace
-						$wmiComputer | Add-Member -Membertype NoteProperty -Name HD$($i)_FileSystem -Value $harddrive.FileSystem
-						$wmiComputer | Add-Member -Membertype NoteProperty -Name HD$($i)_VolumeSerial -Value $harddrive.VolumeSerialNumber
+						$wmiComputer | Add-Member -Membertype NoteProperty -Name HardDrive$($i)_Capabilities -Value $harddrive.CapabilityDescriptions	
+						$wmiComputer | Add-Member -Membertype NoteProperty -Name HardDrive$($i)_Partitions -Value $harddrive.Partitions					
+						$wmiComputer | Add-Member -Membertype NoteProperty -Name HardDrive$($i)_InterfaceType -Value $harddrive.InterfaceType					
+						$wmiComputer | Add-Member -Membertype NoteProperty -Name HardDrive$($i)_SerialNumber -Value $harddrive.SerialNumber	
+						$wmiComputer | Add-Member -Membertype NoteProperty -Name HardDrive$($i)_FirmwareVersion -Value $harddrive.FirmwareRevision	
+					}
+					$i++
+				}
+			}
+			
+			#Partitions
+			if(($drivepartitions -eq $true) -or ($all -eq $true))
+			{				
+				$i = 0 
+				$wmiPart = Get-WMIObject win32_logicaldisk -Filter "DriveType=3" -ComputerName $computer
+				foreach($partition in $wmiPart)
+				{
+					$formattedHDSize = (ConvertFrom-Bytes -b $partition.size -bi)
+					$wmiComputer | Add-Member -Membertype NoteProperty -Name Partition$($i)_ID -Value $partition.DeviceID
+					$wmiComputer | Add-Member -Membertype NoteProperty -Name Partition$($i)_Size -Value $formattedHDSize
+					if(($extendedPartitionInfo -eq $true) -or ($all -eq $true) -and ($noExt -ne $true))
+					{
+						$formattedHDFreespace = (ConvertFrom-Bytes -b $partition.freespace -bi)
+						$wmiComputer | Add-Member -Membertype NoteProperty -Name Partition$($i)_Label -Value $partition.VolumeName
+						$wmiComputer | Add-Member -Membertype NoteProperty -Name Partition$($i)_Freespace -Value $formattedHDFreespace
+						$wmiComputer | Add-Member -Membertype NoteProperty -Name Partition$($i)_FileSystem -Value $partition.FileSystem
+						$wmiComputer | Add-Member -Membertype NoteProperty -Name Partition$($i)_VolumeSerial -Value $partition.VolumeSerialNumber
 					}
 					$i++
 				}
@@ -261,7 +296,7 @@ function Get-WMIComputer
 					$formattedRDSize = (ConvertFrom-Bytes -b $rd.size -bi)
 					$wmiComputer | Add-Member -Membertype NoteProperty -Name RemovableDisk$($i)_ID -Value $rd.DeviceID
 					$wmiComputer | Add-Member -Membertype NoteProperty -Name RemovableDisk$($i)_Size -Value $formattedRDSize
-					if(($extendedHDInfo -eq $true) -or ($all -eq $true))
+					if(($extendedRDInfo -eq $true) -or ($all -eq $true) -and ($noExt -ne $true))
 					{
 						$formattedRDFreespace = (ConvertFrom-Bytes -b $rd.freespace -bi)
 						$wmiComputer | Add-Member -Membertype NoteProperty -Name RemovableDisk$($i)_Label -Value $rd.VolumeName
@@ -375,6 +410,7 @@ function Get-WMIComputer
 				{
 					$wmiComputer | Add-Member -MemberType NoteProperty -Name Optical$($i)_ID -Value $opticaldrive.ID
 					$wmiComputer | Add-Member -MemberType NoteProperty -Name Optical$($i)_Name -Value $opticaldrive.Name
+					$wmiComputer | Add-Member -MemberType NoteProperty -Name Optical$($i)_DriveType -Value $opticaldrive.MediaType
 					$i++
 				}
 			}
