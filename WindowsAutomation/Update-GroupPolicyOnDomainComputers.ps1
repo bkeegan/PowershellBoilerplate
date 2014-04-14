@@ -18,22 +18,34 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #>
 
-<#  
-.SYNOPSIS  
-	executes computer group policy on domain computers in a specified OU.
-.DESCRIPTION  
-	This script queries
-.NOTES  
-	File Name  : Update-GroupPolicyOnDomainComputers.ps1 
-	Author     : Brenton Keegan
- 	Requires   : PowerShell 2  
-.LINK  
-	https://github.com/bkeegan/PowershellBoilerplate
-#>
-
-
 function Update-GroupPolicyOnDomainComputers 
 {
+	<#  
+	.SYNOPSIS  
+		Forces a computer group policy refresh on domain computers with accounts in a specified container. 
+	.DESCRIPTION  
+		This script queries active directory using the get-adobject cmdlet and returns only computer accounts existing in a specified container (specified by DN). This script will use WinRM to execute gpupdate /force /target:computer on every computer returned from the active directory query. Any output will be displayed in the console. 
+	.NOTES  
+		File Name  : Update-GroupPolicyOnDomainComputers.ps1 
+		Author     : Brenton Keegan
+		Requires   : PowerShell 3, activedirectory module  
+	.LINK  
+		https://github.com/bkeegan/PowershellBoilerplate
+	.EXAMPLE
+		Update-GroupPolicyOnDomainComputers -t "OU=Servers,DC=Domain,DC=Local" -s Base
+		
+		Description
+		-----------
+		The command below will run gpupdate /force /target:computer on the computers that have domain accounts under the specified OU. This will not apply to any computers with accounts in sub-containers.
+	.EXAMPLE
+		Update-GroupPolicyOnDomainComputers -t "OU=Servers,DC=Domain,DC=Local"
+
+		Description
+		-----------
+		The command below will run gpupdate /force /target:computer on the computers that have domain accounts under the specified OU. This will also apply to any computers with accounts in sub-containers as the default searchscope is Subtree 
+	#>
+	
+	
 	[cmdletbinding()]
 		Param
 		(
