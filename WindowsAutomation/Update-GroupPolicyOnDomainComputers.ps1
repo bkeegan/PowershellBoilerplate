@@ -20,14 +20,15 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 <#  
 .SYNOPSIS  
-    executes computer group policy on domain computers in a specified OU.
+	executes computer group policy on domain computers in a specified OU.
 .DESCRIPTION  
 	This script queries
 .NOTES  
-    File Name  : Update-GroupPolicyOnDomainComputers.ps1 
-    Author     : Brenton Keegan
-    Requires   : PowerShell 2  
+	File Name  : Update-GroupPolicyOnDomainComputers.ps1 
+	Author     : Brenton Keegan
+ 	Requires   : PowerShell 2  
 .LINK  
+	https://github.com/bkeegan/PowershellBoilerplate
 #>
 
 
