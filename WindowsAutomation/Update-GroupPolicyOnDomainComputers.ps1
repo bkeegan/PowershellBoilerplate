@@ -1,5 +1,5 @@
 <#
-Update-GroupPolicyOnDomainComputers.ps1 - runs gpupdate on domain computers in a specified OU.
+Update-GroupPolicyOnDomainComputers.ps1 - runs gpupdate on domain computers in a specified container.
 
 Copyright (C) 2013  Brenton Keegan
 
@@ -28,7 +28,8 @@ function Update-GroupPolicyOnDomainComputers
 	.NOTES  
 		File Name  : Update-GroupPolicyOnDomainComputers.ps1 
 		Author     : Brenton Keegan
-		Requires   : PowerShell 3, activedirectory module  
+		Requires   : PowerShell 3, activedirectory module
+		License    : GPLv2	
 	.LINK  
 		https://github.com/bkeegan/PowershellBoilerplate
 	.EXAMPLE
@@ -51,7 +52,6 @@ function Update-GroupPolicyOnDomainComputers
 		String. Distinguished name of AD container.
 	.OUTPUTS
 		Displays the return from the attempt to run gpupdate /force /target:computer on all remote computers
-	
 	#>
 	
 	[cmdletbinding()]
