@@ -43,8 +43,16 @@ function Update-GroupPolicyOnDomainComputers
 		Description
 		-----------
 		The command below will run gpupdate /force /target:computer on the computers that have domain accounts under the specified OU. This will also apply to any computers with accounts in sub-containers as the default searchscope is Subtree 
-	#>
+	.PARAMETER target
+		Distiguished name of target container. (ex. OU=Server,DC=Domain,DC=Local)
+	.PARAMETER searchScope
+		Passes through to the searchscope parameter of the get-adobject cmdlet. Default is "Subtree"
+	.INPUTS
+		String. Distinguished name of AD container.
+	.OUTPUTS
+		Displays the return from the attempt to run gpupdate /force /target:computer on all remote computers
 	
+	#>
 	
 	[cmdletbinding()]
 		Param
