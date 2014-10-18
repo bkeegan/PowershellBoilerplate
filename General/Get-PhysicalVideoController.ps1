@@ -1,22 +1,20 @@
-<#
-Get-PhysicalVideoController.ps1 - performs a WMI query filtering out any video controllers not attached to a physical bus
-
-Copyright (C) 2013  Brenton Keegan
-
-This program is free software; you can redistribute it and/or
-modify it under the terms of the GNU General Public License
-as published by the Free Software Foundation; either version 2
-of the License, or (at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software
-Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
-#>
+<# 
+.SYNOPSIS 
+	Performs a WMI query for physical video controllers (i.e. graphic cards)
+.DESCRIPTION 
+	A WMI Query will return all video controllers, even virtual video controllers. This cmdlet filters the results by excluding anything attached to the virtual hardware bus and the remaining results must be attached to some other bus (an actual physical bus such as PCI, AGP etc)
+	Please note that a VM's video controller will return as a physical network adapter because it is attached to the PCI bus.
+.NOTES 
+    File Name  : Get-PhysicalVideoController.ps1 
+    Author     : Brenton keegan - brenton.keegan@gmail.com 
+    Licenced under GPLv2  
+.LINK 
+	https://github.com/bkeegan/PowershellBoilerplate
+    License: https://github.com/bkeegan/PowershellBoilerplate/blob/master/LICENSE.md
+.EXAMPLE 
+	Get-PhysicalVideoController -c "TestPC"
+	This command will return physical video controllers on the computer "TestPC"
+#> 
 
 function Get-PhysicalVideoController
 {
@@ -25,14 +23,15 @@ function Get-PhysicalVideoController
 	(
 		[parameter(Mandatory=$false,ValueFromPipeline=$true)]
 		[alias("c")]
-		[string]$computer
+		[string]$computer="localhost"
 	)
-		
-	if([string]$computer -eq "")
+	if((Test-Connection $computer -Quiet) -eq $true)
 	{
-		$computer = "localhost"
+		$return = Get-WMIObject -ComputerName $computer win32_videocontroller | Where {$_.PNPDeviceID -notmatch "[ROOT|SW]\\.+"}
+		Return $return
 	}
-
-	$return = Get-WMIObject -ComputerName $computer win32_videocontroller | Where {$_.PNPDeviceID -notmatch "[ROOT|SW]\\.+"}
-	Return $return
+	else
+	{
+		Throw "The host, $computer, could not be contacted."
+	}
 }
