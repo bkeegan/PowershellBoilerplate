@@ -1,23 +1,21 @@
-<#
-Get-SpecialFolderObject.ps1 - Returns the object for a Special Folder.
-More on Special Folders:http://en.wikipedia.org/wiki/Special_folder
+<# 
+.SYNOPSIS 
+	Returns the object for a Special Folder.
+.DESCRIPTION 
+	On Microsoft Windows, a special folder is a folder which is presented to the user through an interface as an abstract concept instead of an absolute folder path. They are fetched based on numerical ID. list of IDs can be found here:
+	http://code.snapstream.com/api/bm11/SnapStream.Util.CSIDL.html
+.NOTES 
+    File Name  : Get-SpecialFolderObject.ps1 
+    Author     : Brenton keegan - brenton.keegan@gmail.com 
+    Licenced under GPLv2  
+.LINK 
+	https://github.com/bkeegan/PowershellBoilerplate
+    License: https://github.com/bkeegan/PowershellBoilerplate/blob/master/LICENSE.md
+.EXAMPLE 
+	Get-SpecialFolderObject -id 0
+	This command will return the special folder object for ID 0 (User's Desktop folder)
 
-Copyright (C) 2013  Brenton Keegan
-
-This program is free software; you can redistribute it and/or
-modify it under the terms of the GNU General Public License
-as published by the Free Software Foundation; either version 2
-of the License, or (at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software
-Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
-#>
+#> 
 
 function Get-SpecialFolderObject
 {
